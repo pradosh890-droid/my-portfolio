@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minimalist Chromatic Photo Portfolio - Pro Edition</title>
   <style>
-    /* 1. Global Setup & Smooth Transitions */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,34 +12,92 @@
     }
 
     body {
-      background: linear-gradient(135deg, #0b0f19, #111827);
+      background:
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.2), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.12), transparent 28%),
+        linear-gradient(135deg, #0b0f19, #111827 45%, #1f2937);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 20px;
+      padding: 24px;
       transition: background 0.3s ease;
     }
 
-    /* 2. Main Container Shell Box */
-    .portfolio-card {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 24px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-      width: 440px;
-      text-align: center;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+    .portfolio-shell {
+      width: min(92vw, 980px);
+      position: relative;
     }
 
-    /* Top Bar Utilities Layer */
+    .portfolio-card {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 26px 22px 20px;
+      border-radius: 34px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.5);
+      width: 100%;
+      text-align: center;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(17, 24, 39, 0.05);
+    }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .section-header {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .collection-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      margin-bottom: 18px;
+    }
+
+    .meta-pill {
+      background: rgba(17, 24, 39, 0.05);
+      color: #374151;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 7px 10px;
+    }
+
+    .portfolio-summary {
+      font-size: 12px;
+      color: #6b7280;
+      text-align: left;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
     }
 
     h1 {
@@ -52,16 +109,23 @@
       transition: color 0.3s ease;
     }
 
-    /* THE FIX: Pure CSS Pill Switch Design Container (No Emojis!) */
     .theme-switch-container {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
+      user-select: none;
+      padding: 6px 8px;
+      border-radius: 999px;
+      transition: background 0.2s ease;
+    }
+
+    .theme-switch-container:hover {
+      background: rgba(148, 163, 184, 0.08);
     }
 
     .switch-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #6b7280;
       text-transform: uppercase;
@@ -70,12 +134,13 @@
     }
 
     .switch-track {
-      width: 44px;
+      width: 46px;
       height: 24px;
       background-color: #e5e7eb;
       border-radius: 20px;
       position: relative;
       transition: background-color 0.3s ease;
+      box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.08);
     }
 
     .switch-thumb {
@@ -86,17 +151,19 @@
       position: absolute;
       top: 3px;
       left: 3px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* 3. 6-Color Filter Icon Row Palette Layout */
     .filter-palette {
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 30px;
+      margin-bottom: 22px;
       flex-wrap: wrap;
+      padding: 10px 8px;
+      background: rgba(148, 163, 184, 0.06);
+      border-radius: 18px;
     }
 
     .color-pill {
@@ -105,60 +172,251 @@
       border-radius: 50%;
       cursor: pointer;
       border: 4px solid #ffffff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
-    /* Dynamic Glowing Neon Hovers */
-    .color-pill[data-color="red"]:hover    { transform: scale(1.15); box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
-    .color-pill[data-color="blue"]:hover   { transform: scale(1.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
-    .color-pill[data-color="green"]:hover  { transform: scale(1.15); box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
-    .color-pill[data-color="orange"]:hover { transform: scale(1.15); box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }
-    .color-pill[data-color="purple"]:hover { transform: scale(1.15); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
-    .color-pill[data-color="black"]:hover  { transform: scale(1.15); box-shadow: 0 0 15px rgba(17, 24, 39, 0.6); }
+    .color-pill[data-color="red"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(239, 68, 68, 0.55); }
+    .color-pill[data-color="blue"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(59, 130, 246, 0.55); }
+    .color-pill[data-color="green"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(16, 185, 129, 0.55); }
+    .color-pill[data-color="orange"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(245, 158, 11, 0.55); }
+    .color-pill[data-color="purple"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(168, 85, 247, 0.55); }
+    .color-pill[data-color="black"]:hover { transform: scale(1.12); box-shadow: 0 0 16px rgba(17, 24, 39, 0.55); }
 
     .color-pill.active {
       transform: scale(1.1);
-      box-shadow: 0 0 0 3px #111827, 0 6px 15px rgba(0,0,0,0.15);
+      border-color: rgba(17, 24, 39, 0.7);
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15), 0 6px 18px rgba(0,0,0,0.18);
     }
 
-    /* 4. Photos-Only Grid Layout */
     .image-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      column-count: 3;
+      column-gap: 14px;
       min-height: 150px;
     }
 
+    .gallery-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font: inherit;
+      font-size: 12px;
+      color: #111827;
+      background: rgba(255, 255, 255, 0.8);
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    .favorites-filter {
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: transparent;
+      color: #374151;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .favorites-filter.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
     .photo-frame {
+      height: auto;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 14px;
+      break-inside: avoid;
+    }
+
+    .photo-frame img {
+      height: 180px;
+      flex: 1;
+    }
+
+    .photo-caption {
+      position: static;
+      padding: 10px 12px;
+      color: #111827;
+      background: #ffffff;
+      text-shadow: none;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .photo-description {
+      padding: 0 12px 12px;
+      color: #6b7280;
+      background: #ffffff;
+      font-size: 10px;
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    .favorite-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      color: #6b7280;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .favorite-button.active {
+      color: #ef4444;
+    }
+
+    .empty-state {
+      column-span: all;
+      padding: 28px 12px;
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    .info-panel {
+      padding: 16px;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 16px;
+      background: rgba(148, 163, 184, 0.05);
+    }
+
+    .info-panel h2 {
+      color: #111827;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .info-panel p,
+    .info-panel a {
+      color: #6b7280;
+      font-size: 11px;
+      line-height: 1.6;
+      text-decoration: none;
+    }
+
+    .lightbox-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .download-button {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: #ffffff;
+      color: #111827;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .lightbox-description {
+      max-width: 520px;
+      margin: 8px auto 0;
+      color: #d1d5db;
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .photo-frame {
+      position: relative;
       height: 140px;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       background-color: #f3f4f6;
       cursor: zoom-in;
-      animation: imageFadeIn 0.4s ease forwards;
+      animation: imageFadeIn 0.45s ease forwards;
+    }
+
+    .photo-frame:focus-visible,
+    .color-pill:focus-visible,
+    .theme-switch-container:focus-visible,
+    .lightbox-close:focus-visible,
+    .lightbox-nav:focus-visible {
+      outline: 3px solid #3b82f6;
+      outline-offset: 3px;
+    }
+
+    .photo-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.1));
+      pointer-events: none;
     }
 
     .photo-frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      display: block;
+      transition: transform 0.45s ease;
     }
 
     .photo-frame:hover img {
       transform: scale(1.06);
     }
 
-    /* Full Screen Overlay Lightbox Frame styles */
+    .photo-caption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      z-index: 1;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: left;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+    }
+
     .lightbox {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(11, 15, 25, 0.9);
+      inset: 0;
+      background-color: rgba(11, 15, 25, 0.83);
       backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
@@ -166,7 +424,7 @@
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.25s ease;
       cursor: zoom-out;
     }
 
@@ -175,33 +433,271 @@
       pointer-events: auto;
     }
 
+    .lightbox-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: min(90vw, 900px);
+      max-height: 90vh;
+    }
+
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      color: #111827;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      transform: translateY(-50%);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+
+    .lightbox-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -30px;
+      color: #ffffff;
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
     .lightbox-img {
-      max-width: 85%;
-      max-height: 85%;
-      border-radius: 16px;
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 18px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.5);
       transform: scale(0.95);
       transition: transform 0.3s ease;
+      display: block;
     }
 
     .lightbox.show .lightbox-img {
       transform: scale(1);
     }
 
-    /* 5. Dark Mode Active Layout States */
+    .lightbox-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: #111827;
+      font-size: 24px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
     .portfolio-card.dark-mode {
       background-color: #1f2937;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      border-color: rgba(148, 163, 184, 0.1);
     }
-    
-    .portfolio-card.dark-mode h1 {
+
+    .hero-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    .brand-mark::before {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444, #3b82f6, #10b981);
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    .nav-links span {
+      opacity: 0.8;
+    }
+
+    .cta-button {
+      border: none;
+      background: linear-gradient(135deg, #111827, #374151);
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(17, 24, 39, 0.18);
+    }
+
+    .stats-strip {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .stat-box {
+      min-width: 90px;
+      background: rgba(17, 24, 39, 0.04);
+      border: 1px solid rgba(17, 24, 39, 0.06);
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    .portfolio-card.dark-mode h1,
+    .portfolio-card.dark-mode .collection-name {
       color: #f9fafb;
     }
 
-    .portfolio-card.dark-mode .switch-label {
-      color: #9ca3af;
+    .portfolio-card.dark-mode .eyebrow {
+      color: #a5b4cf;
     }
 
-    /* Slides the toggle ball smoothly to the right and turns the track dark blue */
+    .portfolio-card.dark-mode .meta-pill {
+      background: rgba(148, 163, 184, 0.08);
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.15);
+    }
+
+    .portfolio-card.dark-mode .portfolio-summary {
+      color: #d1d5db;
+    }
+
+    .portfolio-card.dark-mode .switch-label {
+      color: #cbd5e1;
+    }
+
+    .portfolio-card.dark-mode .filter-palette {
+      background: rgba(148, 163, 184, 0.08);
+    }
+
+    .portfolio-card.dark-mode .stat-box {
+      background: rgba(148, 163, 184, 0.08);
+      border-color: rgba(148, 163, 184, 0.12);
+    }
+
+    .portfolio-card.dark-mode .stat-value,
+    .portfolio-card.dark-mode .brand-mark {
+      color: #f9fafb;
+    }
+
+    .portfolio-card.dark-mode .stat-label {
+      color: #cbd5e1;
+    }
+
+    .portfolio-card.dark-mode .search-box {
+      background: rgba(15, 23, 42, 0.45);
+      border-color: rgba(148, 163, 184, 0.2);
+      color: #f9fafb;
+    }
+
+    .portfolio-card.dark-mode .favorites-filter {
+      border-color: rgba(148, 163, 184, 0.2);
+      color: #e5e7eb;
+    }
+
+    .portfolio-card.dark-mode .favorites-filter.active {
+      background: #f9fafb;
+      color: #111827;
+    }
+
+    .portfolio-card.dark-mode .photo-caption,
+    .portfolio-card.dark-mode .photo-description {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .portfolio-card.dark-mode .photo-description {
+      color: #cbd5e1;
+    }
+
+    .portfolio-card.dark-mode .info-panel {
+      background: rgba(148, 163, 184, 0.08);
+      border-color: rgba(148, 163, 184, 0.14);
+    }
+
+    .portfolio-card.dark-mode .info-panel h2 {
+      color: #f9fafb;
+    }
+
+    .portfolio-card.dark-mode .info-panel p,
+    .portfolio-card.dark-mode .info-panel a {
+      color: #cbd5e1;
+    }
+
     .portfolio-card.dark-mode .switch-track {
       background-color: #3b82f6;
     }
@@ -211,101 +707,365 @@
     }
 
     .portfolio-card.dark-mode .color-pill.active {
-      box-shadow: 0 0 0 3px #f9fafb, 0 6px 15px rgba(0,0,0,0.3);
+      border-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.18), 0 6px 15px rgba(0,0,0,0.3);
     }
 
     @keyframes imageFadeIn {
       from { opacity: 0; transform: scale(0.96) translateY(5px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
+
+    @media (max-width: 700px) {
+      .image-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .portfolio-card {
+        padding: 22px 16px 18px;
+      }
+
+      .top-bar {
+        margin-bottom: 18px;
+      }
+
+      .filter-palette {
+        gap: 10px;
+      }
+
+      .image-grid {
+        column-count: 1;
+      }
+
+      .color-pill {
+        width: 34px;
+        height: 34px;
+      }
+
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+
+      .gallery-tools,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-tools {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="portfolio-card" id="card">
-    
-    <!-- Top Utility Bar Header Grid -->
-    <div class="top-bar">
-      <h1>Studio Portfolio</h1>
-      
-      <!-- Re-engineered Custom Switch Component -->
-      <div class="theme-switch-container" id="theme-toggle">
-        <span class="switch-label" id="mode-text">Light</span>
-        <div class="switch-track">
-          <div class="switch-thumb"></div>
+  <div class="portfolio-shell">
+    <div class="portfolio-card" id="card">
+      <div class="hero-row">
+        <div class="title-group">
+          <div class="brand-mark">Visual Journal</div>
+          <h1>Studio Portfolio</h1>
+        </div>
+
+        <div class="theme-switch-container" id="theme-toggle" aria-label="Toggle dark mode" tabindex="0">
+          <span class="switch-label" id="mode-text">Light</span>
+          <div class="switch-track">
+            <div class="switch-thumb"></div>
+          </div>
         </div>
       </div>
 
-    </div>
-    
-    <!-- 6 Color Pill Selector row -->
-    <div class="filter-palette">
-      <div class="color-pill active" style="background-color: #ef4444;" data-color="red"></div>
-      <div class="color-pill" style="background-color: #3b82f6;" data-color="blue"></div>
-      <div class="color-pill" style="background-color: #10b981;" data-color="green"></div>
-      <div class="color-pill" style="background-color: #f59e0b;" data-color="orange"></div>
-      <div class="color-pill" style="background-color: #a855f7;" data-color="purple"></div>
-      <div class="color-pill" style="background-color: #111827;" data-color="black"></div>
-    </div>
+      <div class="nav-row">
+        <div class="nav-links">
+          <span>Portfolio</span>
+          <span>Archive</span>
+          <span>Journal</span>
+        </div>
+        <button class="cta-button" type="button">View Set</button>
+      </div>
 
-    <!-- Live Active Target Photo mounting slot -->
-    <div class="image-grid" id="gallery-box"></div>
+      <div class="stats-strip">
+        <div class="stat-box">
+          <span class="stat-value" id="photo-count">2</span>
+          <span class="stat-label">Shots</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-value">6</span>
+          <span class="stat-label">Palettes</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-value">2026</span>
+          <span class="stat-label">Edition</span>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="eyebrow">Curated Set</div>
+        <div class="collection-name" id="collection-name">Red Mood</div>
+
+        <div class="meta-row">
+          <span class="meta-pill">Editorial</span>
+          <span class="meta-pill">Minimal</span>
+          <span class="meta-pill">Cinematic</span>
+        </div>
+
+        <div class="portfolio-summary">
+          Thoughtful visuals shaped by mood, contrast, and natural light, selected to feel cinematic and minimal.
+        </div>
+      </div>
+
+      <div class="filter-palette" aria-label="Gallery color filters">
+        <div class="color-pill active" style="background-color: #ef4444;" data-color="red" aria-label="Red gallery"></div>
+        <div class="color-pill" style="background-color: #3b82f6;" data-color="blue" aria-label="Blue gallery"></div>
+        <div class="color-pill" style="background-color: #10b981;" data-color="green" aria-label="Green gallery"></div>
+        <div class="color-pill" style="background-color: #f59e0b;" data-color="orange" aria-label="Orange gallery"></div>
+        <div class="color-pill" style="background-color: #a855f7;" data-color="purple" aria-label="Purple gallery"></div>
+        <div class="color-pill" style="background-color: #111827;" data-color="black" aria-label="Black gallery"></div>
+      </div>
+
+      <div class="gallery-tools">
+        <input class="search-box" id="search-box" type="search" placeholder="Search photos..." aria-label="Search photos">
+        <button class="favorites-filter" id="favorites-filter" type="button" aria-pressed="false">Favorites: 0</button>
+      </div>
+
+      <div class="image-grid" id="gallery-box"></div>
+
+      <div class="info-grid">
+        <section class="info-panel" id="about">
+          <h2>About</h2>
+          <p>A small visual journal exploring color, texture, quiet places, and everyday light.</p>
+        </section>
+        <section class="info-panel" id="contact">
+          <h2>Contact</h2>
+          <p><a href="mailto:hello@example.com">hello@example.com</a><br>Available for creative projects.</p>
+        </section>
+      </div>
+    </div>
   </div>
 
   <!-- Hidden Pop-up Box Module Layer -->
-  <div class="lightbox" id="lightbox-overlay">
-    <img class="lightbox-img" id="lightbox-target-pic" src="" alt="Popup Preview">
+  <div class="lightbox" id="lightbox-overlay" aria-hidden="true">
+    <div class="lightbox-wrap">
+      <button class="lightbox-close" type="button" aria-label="Close image preview">×</button>
+      <img class="lightbox-img" id="lightbox-target-pic" src="" alt="Large preview of selected portfolio photo">
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+      <div class="lightbox-description" id="lightbox-description"></div>
+      <div class="lightbox-actions">
+        <button class="download-button" id="download-button" type="button">Download Photo</button>
+      </div>
+    </div>
+    <button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous image">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" type="button" aria-label="Next image">&#8250;</button>
   </div>
 
   <script>
-    // Local project asset references configuration
     const galleryData = {
-      red: ["rose.jpg", "plant.jpg"],
-      blue: ["night.jpg", "ice.jpg"],
-      green: ["green.webp", "greenery.jpg"],
-      orange: ["orange.JPEG.jpg", "sun.webp"],
-      purple: ["tree.jpg", "purple-flowers-at-sunset-by-the-water-photo.jpeg"],
-      black: ["eye.webp", "sea.jpg"]
+      red: [
+        { src: "rose.jpg", caption: "Crimson Rose", description: "A close study of color and natural texture." },
+        { src: "plant.jpg", caption: "Quiet Leaves", description: "Soft shadows gathered in a calm garden corner." },
+        { src: "Pomegranate.jpg", caption: "Ruby Texture", description: "Rich red tones and a sculptural surface." },
+        { src: "tulips.jpg", caption: "Scarlet Tulips", description: "A bright floral frame filled with movement." }
+      ],
+      blue: [
+        { src: "night.jpg", caption: "Blue Hour", description: "A quiet landscape between daylight and night." },
+        { src: "ice.jpg", caption: "Frozen Light", description: "Cool geometry shaped by reflected light." },
+        { src: "Bubbly blue_.jpg", caption: "Bubbly Blue", description: "Playful blue forms with a bright, airy mood." },
+        { src: "water.jpg", caption: "Open Water", description: "A spacious study of ripples and horizon." }
+      ],
+      green: [
+        { src: "green.webp", caption: "Fresh Canopy", description: "Layered leaves creating a vivid natural ceiling." },
+        { src: "greenery.jpg", caption: "Garden Study", description: "A textured frame of growth and gentle light." },
+        { src: "green.jpg", caption: "Green Horizon", description: "A saturated landscape with a restful rhythm." },
+        { src: "peacock.jpg", caption: "Emerald Feather", description: "Natural detail rendered in jewel-like color." }
+      ],
+      orange: [
+        { src: "orange.JPEG.jpg", caption: "Citrus Glow", description: "Warm color and rounded form in close focus." },
+        { src: "sun.webp", caption: "Late Sun", description: "The last golden light resting over the scene." },
+        { src: "birds.jpg", caption: "Warm Wings", description: "A fleeting moment held in amber tones." },
+        { src: "leafs.jpg", caption: "Autumn Leaves", description: "Seasonal color collected in a textured frame." }
+      ],
+      purple: [
+        { src: "tree.jpg", caption: "Violet Silhouette", description: "A dark organic shape against a soft sky." },
+        { src: "purple-flowers-at-sunset-by-the-water-photo.jpeg", caption: "Twilight Flowers", description: "Flowers and water meeting in evening color." },
+        { src: "lamp.jpg", caption: "Evening Lamp", description: "A small pool of light in a violet atmosphere." },
+        { src: "eiffel tower.jpg", caption: "Paris in Violet", description: "An iconic structure softened by dusk." }
+      ],
+      black: [
+        { src: "eye.webp", caption: "Still Focus", description: "A minimal portrait of attention and detail." },
+        { src: "sea.jpg", caption: "Deep Sea", description: "Dark blue depth framed with a quiet mood." },
+        { src: "dice.jpg", caption: "Chance", description: "A graphic composition about choice and chance." },
+        { src: "swan.jpg", caption: "Silent Form", description: "Elegant movement reduced to a simple silhouette." }
+      ]
     };
+
     const galleryBox = document.getElementById('gallery-box');
     const colorPills = document.querySelectorAll('.color-pill');
-    
-    // Advancement Targets
     const cardElement = document.getElementById('card');
     const themeToggleContainer = document.getElementById('theme-toggle');
     const modeText = document.getElementById('mode-text');
+    const collectionName = document.getElementById('collection-name');
+    const photoCount = document.getElementById('photo-count');
     const lightboxOverlay = document.getElementById('lightbox-overlay');
     const lightboxTargetPic = document.getElementById('lightbox-target-pic');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxDescription = document.getElementById('lightbox-description');
+    const lightboxCloseButton = document.querySelector('.lightbox-close');
+    const previousButton = document.querySelector('.lightbox-prev');
+    const nextButton = document.querySelector('.lightbox-next');
+    const downloadButton = document.getElementById('download-button');
+    const searchBox = document.getElementById('search-box');
+    const favoritesFilter = document.getElementById('favorites-filter');
 
-    // 1. Core Portfolio Render Function
-    function renderGallery(colorKey) {
-      galleryBox.innerHTML = ""; 
+    let currentItems = [];
+    let currentIndex = 0;
+    let lastFocusedPhoto = null;
+    let activeColor = 'red';
+    let showFavoritesOnly = false;
+    const favorites = new Set(JSON.parse(localStorage.getItem('portfolioFavorites') || '[]'));
 
-      const items = galleryData[colorKey];
+    const collectionLabels = {
+      red: 'Red Mood',
+      blue: 'Blue Calm',
+      green: 'Fresh Green',
+      orange: 'Golden Glow',
+      purple: 'Violet Dream',
+      black: 'Noir Luxe'
+    };
 
-      items.forEach(sourceUrl => {
+    function closeLightbox() {
+      lightboxOverlay.classList.remove('show');
+      lightboxOverlay.setAttribute('aria-hidden', 'true');
+      if (lastFocusedPhoto) lastFocusedPhoto.focus();
+    }
+
+    function showLightboxImage(index) {
+      currentIndex = (index + currentItems.length) % currentItems.length;
+      const item = currentItems[currentIndex];
+      lightboxTargetPic.src = item.src;
+      lightboxTargetPic.alt = item.caption;
+      lightboxCaption.textContent = `${item.caption} - ${currentIndex + 1} of ${currentItems.length}`;
+      lightboxDescription.textContent = item.description;
+      downloadButton.dataset.src = item.src;
+      downloadButton.download = item.src.split('/').pop();
+    }
+
+    function openLightbox(items, index, photoFrame) {
+      currentItems = items;
+      lastFocusedPhoto = photoFrame;
+      showLightboxImage(index);
+      lightboxOverlay.classList.add('show');
+      lightboxOverlay.setAttribute('aria-hidden', 'false');
+      lightboxCloseButton.focus();
+    }
+
+    function updateFavoritesButton() {
+      favoritesFilter.textContent = `Favorites: ${favorites.size}`;
+      favoritesFilter.classList.toggle('active', showFavoritesOnly);
+      favoritesFilter.setAttribute('aria-pressed', String(showFavoritesOnly));
+    }
+
+    function saveFavorites() {
+      localStorage.setItem('portfolioFavorites', JSON.stringify([...favorites]));
+      updateFavoritesButton();
+    }
+
+    function renderGallery(colorKey = activeColor) {
+      galleryBox.innerHTML = "";
+      activeColor = colorKey;
+      const query = searchBox.value.trim().toLowerCase();
+      const items = (galleryData[colorKey] || []).filter((item) => {
+        const matchesSearch = `${item.caption} ${item.description}`.toLowerCase().includes(query);
+        const matchesFavorite = !showFavoritesOnly || favorites.has(item.src);
+        return matchesSearch && matchesFavorite;
+      });
+      currentItems = items;
+      collectionName.textContent = collectionLabels[colorKey] || 'Curated Collection';
+      photoCount.textContent = items.length;
+
+      if (!items.length) {
+        galleryBox.innerHTML = '<div class="empty-state">No photos match this view.</div>';
+        return;
+      }
+
+      items.forEach((item, index) => {
         const frame = document.createElement('div');
         frame.classList.add('photo-frame');
+        frame.setAttribute('role', 'button');
+        frame.setAttribute('tabindex', '0');
+        frame.setAttribute('aria-label', `Open ${item.caption}`);
+
+        const favoriteButton = document.createElement('button');
+        favoriteButton.className = `favorite-button${favorites.has(item.src) ? ' active' : ''}`;
+        favoriteButton.type = 'button';
+        favoriteButton.textContent = favorites.has(item.src) ? '♥' : '♡';
+        favoriteButton.setAttribute('aria-label', `Favorite ${item.caption}`);
+        favoriteButton.setAttribute('aria-pressed', String(favorites.has(item.src)));
+        favoriteButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (favorites.has(item.src)) {
+            favorites.delete(item.src);
+          } else {
+            favorites.add(item.src);
+          }
+          saveFavorites();
+          renderGallery(activeColor);
+        });
 
         const img = document.createElement('img');
-        img.src = sourceUrl;
-        img.alt = "Color themed photography portfolio shot";
+        img.src = item.src;
+        img.alt = item.caption;
 
-        // Trigger popup modal on photo click actions
-        frame.addEventListener('click', () => {
-          lightboxTargetPic.src = sourceUrl;
-          lightboxOverlay.classList.add('show');
+        const caption = document.createElement('div');
+        caption.className = 'photo-caption';
+        caption.textContent = item.caption;
+
+        const description = document.createElement('div');
+        description.className = 'photo-description';
+        description.textContent = item.description;
+
+        const openSelectedImage = () => {
+          openLightbox(items, index, frame);
+        };
+
+        frame.addEventListener('click', openSelectedImage);
+        frame.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openSelectedImage();
+          }
         });
 
         frame.appendChild(img);
+        frame.appendChild(favoriteButton);
+        frame.appendChild(caption);
+        frame.appendChild(description);
         galleryBox.appendChild(frame);
       });
     }
 
-    // 2. Connect Color Switching Pill Events
-    colorPills.forEach(pill => {
+    searchBox.addEventListener('input', () => renderGallery(activeColor));
+
+    favoritesFilter.addEventListener('click', () => {
+      showFavoritesOnly = !showFavoritesOnly;
+      updateFavoritesButton();
+      renderGallery(activeColor);
+    });
+
+    downloadButton.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = downloadButton.dataset.src;
+      link.download = downloadButton.download;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+
+    colorPills.forEach((pill) => {
       pill.addEventListener('click', () => {
-        document.querySelector('.color-pill.active').classList.remove('active');
+        const activePill = document.querySelector('.color-pill.active');
+        if (activePill) activePill.classList.remove('active');
         pill.classList.add('active');
 
         const targetColor = pill.getAttribute('data-color');
@@ -313,24 +1073,51 @@
       });
     });
 
-    // 3. Close Event Hook: Shut popup down when clicking backdrop blur area
-    lightboxOverlay.addEventListener('click', () => {
-      lightboxOverlay.classList.remove('show');
-    });
-
-    // 4. Click Event Switcher: Handles updating the custom toggle layout position smoothly
-    themeToggleContainer.addEventListener('click', () => {
-      cardElement.classList.toggle('dark-mode');
-      
-      // Update label text smoothly alongside position transitions
-      if (cardElement.classList.contains('dark-mode')) {
-        modeText.innerText = "Dark";
-      } else {
-        modeText.innerText = "Light";
+    lightboxOverlay.addEventListener('click', (event) => {
+      if (event.target === lightboxOverlay || event.target === lightboxCloseButton) {
+        closeLightbox();
       }
     });
 
-    // Run startup baseline initializer view loader
+    lightboxCloseButton.addEventListener('click', closeLightbox);
+
+    previousButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      showLightboxImage(currentIndex - 1);
+    });
+
+    nextButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      showLightboxImage(currentIndex + 1);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightboxOverlay.classList.contains('show')) {
+        closeLightbox();
+      }
+
+      if (lightboxOverlay.classList.contains('show') && event.key === 'ArrowLeft') {
+        showLightboxImage(currentIndex - 1);
+      }
+
+      if (lightboxOverlay.classList.contains('show') && event.key === 'ArrowRight') {
+        showLightboxImage(currentIndex + 1);
+      }
+    });
+
+    themeToggleContainer.addEventListener('click', () => {
+      cardElement.classList.toggle('dark-mode');
+      modeText.innerText = cardElement.classList.contains('dark-mode') ? 'Dark' : 'Light';
+    });
+
+    themeToggleContainer.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        themeToggleContainer.click();
+      }
+    });
+
+    updateFavoritesButton();
     renderGallery('red');
   </script>
 
